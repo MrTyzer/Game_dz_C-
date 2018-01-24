@@ -1,0 +1,13 @@
+C:\Users\Джепс\source\repos\Game_dz\Game_dz\bin\Debug\Game_dz.exe.config
+C:\Users\Джепс\source\repos\Game_dz\Game_dz\bin\Debug\Game_dz.exe
+C:\Users\Джепс\source\repos\Game_dz\Game_dz\bin\Debug\Game_dz.pdb
+C:\Users\Джепс\source\repos\Game_dz\Game_dz\obj\Debug\Game_dz.csprojResolveAssemblyReference.cache
+C:\Users\Джепс\source\repos\Game_dz\Game_dz\obj\Debug\Game_dz.csproj.CoreCompileInputs.cache
+C:\Users\Джепс\source\repos\Game_dz\Game_dz\obj\Debug\Game_dz.exe
+C:\Users\Джепс\source\repos\Game_dz\Game_dz\obj\Debug\Game_dz.pdb
+D:\Docs\Visual Studio 2015\Projects\Game_dz\Game_dz\bin\Debug\Game_dz.exe.config
+D:\Docs\Visual Studio 2015\Projects\Game_dz\Game_dz\obj\Debug\Game_dz.exe
+D:\Docs\Visual Studio 2015\Projects\Game_dz\Game_dz\obj\Debug\Game_dz.pdb
+D:\Docs\Visual Studio 2015\Projects\Game_dz\Game_dz\bin\Debug\Game_dz.exe
+D:\Docs\Visual Studio 2015\Projects\Game_dz\Game_dz\bin\Debug\Game_dz.pdb
+D:\Docs\Visual Studio 2015\Projects\Game_dz\Game_dz\obj\Debug\Game_dz.csprojResolveAssemblyReference.cache
