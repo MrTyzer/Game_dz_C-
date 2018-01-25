@@ -9,3 +9,8 @@ D:\Docs\Visual Studio 2015\Projects\Game_dz\Game_dz\obj\Release\Game_dz.exe
 D:\Docs\Visual Studio 2015\Projects\Game_dz\Game_dz\obj\Release\Game_dz.pdb
 D:\Docs\Visual Studio 2015\Projects\Game_dz\Game_dz\bin\Release\Game_dz.exe
 D:\Docs\Visual Studio 2015\Projects\Game_dz\Game_dz\bin\Release\Game_dz.pdb
+D:\Docs\Visual Studio 2015\Projects\Game_dz\Game_dz_C-.git\Game_dz\bin\Release\Game_dz.exe.config
+D:\Docs\Visual Studio 2015\Projects\Game_dz\Game_dz_C-.git\Game_dz\obj\Release\Game_dz.exe
+D:\Docs\Visual Studio 2015\Projects\Game_dz\Game_dz_C-.git\Game_dz\obj\Release\Game_dz.pdb
+D:\Docs\Visual Studio 2015\Projects\Game_dz\Game_dz_C-.git\Game_dz\bin\Release\Game_dz.exe
+D:\Docs\Visual Studio 2015\Projects\Game_dz\Game_dz_C-.git\Game_dz\bin\Release\Game_dz.pdb

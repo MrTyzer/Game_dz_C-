@@ -7,6 +7,7 @@ namespace Game_dz
         protected Point Pos;
         protected Point Dir;
         protected Size Size;
+        public delegate void Message();
 
         protected BaseObject(Point pos, Point dir, Size size)
         {

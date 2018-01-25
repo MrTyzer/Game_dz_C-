@@ -12,13 +12,16 @@ namespace Game_dz
     {
         private static BufferedGraphicsContext _context;
         public static BufferedGraphics Buffer;
-        // Свойства
-        // Ширина и высота игрового поля
+        private static Timer _timer = new Timer();
+        public static Random Rnd = new Random();
         public static int Width { get; set; }
         public static int Height { get; set; }
-
         private static Bullet _bullet;
         private static Asteroid[] _asteroids;
+
+        private static Ship _ship;
+        // Свойства
+        // Ширина и высота игрового поля
 
         static Game()
         {
@@ -41,7 +44,8 @@ namespace Game_dz
                 int r = rnd.Next(10, 60);
                 _asteroids[i] = new Asteroid(new Point(rnd.Next(0, Game.Width), rnd.Next(0, Game.Height)), new Point(r / 6, r), new
                 Size(r, r));
-            }
+            }
+
         }
 
 
@@ -53,12 +57,15 @@ namespace Game_dz
             _context = BufferedGraphicsManager.Current;
             g = form.CreateGraphics();// Создаём объект - поверхность рисования и связываем его с формой
                                       // Запоминаем размеры формы
-                Width = form.Width;
-                Height = form.Height;
+            Width = form.Width;
+            Height = form.Height;
+            _ship = new Ship(new Point(10, 400), new Point(5, 5), new Size(10, 10));
 
             // Связываем буфер в памяти с графическим объектом.
             // для того, чтобы рисовать в буфере
             Buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
+
+            Ship.MessageDie += Finish;
 
             try
             {
@@ -68,12 +75,23 @@ namespace Game_dz
             {
                 Console.WriteLine(d.Message);
             }
-
-            Timer timer = new Timer { Interval = 30 };
-            timer.Start();
-            timer.Tick += Timer_Tick;
+            form.KeyDown += Form_KeyDown;
+            _timer.Interval = 30;
+            _timer.Start();
+            _timer.Tick += Timer_Tick;
 
         }
+
+        private static void Form_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.ControlKey)
+                _bullet = new Bullet(new Point(_ship.Rect.X + 10, _ship.Rect.Y + 4),
+            new Point(4, 0), new Size(4, 1));
+            if (e.KeyCode == Keys.Up)
+                _ship.Up();
+            if (e.KeyCode == Keys.Down)
+                _ship.Down();
+        }
         public static void Draw()
         {
             // Проверяем вывод графики
@@ -81,10 +99,15 @@ namespace Game_dz
             Buffer.Graphics.Clear(Color.Black);
             foreach (BaseObject obj in _objs)
                 obj.Draw();
-            foreach (BaseObject obj in _asteroids)
-                obj.Draw();
-            _bullet.Draw();
-            Buffer.Render();
+            foreach (Asteroid a in _asteroids)
+            {
+                a?.Draw();
+            }
+            _bullet?.Draw();
+            _ship?.Draw();
+            if (_ship != null)
+                Buffer.Graphics.DrawString("Energy:" + _ship.Energy, SystemFonts.DefaultFont, Brushes.White, 0, 0);
+            Buffer.Render();
         }
 
         private static void Timer_Tick(object sender, EventArgs e)
@@ -96,19 +119,37 @@ namespace Game_dz
         public static void Update()
         {
             foreach (BaseObject obj in _objs)
-                obj.Update();
+                obj?.Update();
             foreach (BaseObject obj in _asteroids)
             {
                 if (obj.Collision(_bullet))
                 {
                     System.Media.SystemSounds.Hand.Play();
-                    _bullet.Respawn();
-                    obj.Respawn();
+                    _bullet?.Respawn();
+                    obj?.Respawn();
                 }
-                obj.Update();
+
+                if (obj.Collision(_ship))
+                {
+                    _ship?.EnergyLow(10);
+                    obj?.Respawn();
+                    System.Media.SystemSounds.Asterisk.Play();
+                    if (_ship.Energy <= 0) _ship?.Die();
+                }
+
+                obj?.Update();
             }
-            _bullet.Update();
+            _bullet?.Update();
+            _ship?.Update();
         }
+
+        public static void Finish()
+        {
+            _timer.Stop();
+            Buffer.Graphics.DrawString("The End", new Font(FontFamily.GenericSansSerif, 60,
+            FontStyle.Underline), Brushes.White, 200, 100);
+            Buffer.Render();
+        }
 
     }
 
