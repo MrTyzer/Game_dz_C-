@@ -66,6 +66,7 @@ namespace Game_dz
             Buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
 
             Ship.MessageDie += Finish;
+            form.KeyDown += Form_KeyDown;
 
             try
             {
@@ -75,14 +76,13 @@ namespace Game_dz
             {
                 Console.WriteLine(d.Message);
             }
-            form.KeyDown += Form_KeyDown;
             _timer.Interval = 30;
             _timer.Start();
             _timer.Tick += Timer_Tick;
 
         }
 
-        private static void Form_KeyDown(object sender, KeyEventArgs e)
+        public static void Form_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.ControlKey)
                 _bullet = new Bullet(new Point(_ship.Rect.X + 10, _ship.Rect.Y + 4),

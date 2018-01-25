@@ -15,7 +15,7 @@ namespace Game_dz
         public static int Width { get; set; }
         public static int Height { get; set; }
 
-        public static Form MainForm { get; private set; }
+        public static Form MainForm { get; set; }
 
         public static Button button1 { get; private set; }
         public static Button button2 { get; private set; }
@@ -69,6 +69,7 @@ namespace Game_dz
             Init(MainForm);
         }
 
+
         public static void StartGame(Object sender, EventArgs e)
         {
             Game.Init(MainForm);
@@ -77,6 +78,7 @@ namespace Game_dz
             button3.Location = new Point(0, 0);
             Game.Draw();
         }
+
 
         public static void Quit(Object sender, EventArgs e)
         {
