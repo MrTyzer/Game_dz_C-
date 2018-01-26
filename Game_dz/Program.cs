@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.IO;
 
 namespace Game_dz
 {
@@ -15,7 +16,9 @@ namespace Game_dz
         {
             int width = 800;
             int height = -700;
-
+            //очистка файла
+            StreamWriter sw = new StreamWriter("Log.txt", false);
+            sw.Dispose();
             try
             {
             SplashScreen.FormInit(width, height);

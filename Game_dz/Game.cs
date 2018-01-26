@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.IO;
 
 namespace Game_dz
 {
@@ -18,6 +19,7 @@ namespace Game_dz
         public static int Height { get; set; }
         private static Bullet _bullet;
         private static Asteroid[] _asteroids;
+        public static event EventHandler<string> Log;
 
         private static Ship _ship;
         // Свойства
@@ -31,7 +33,6 @@ namespace Game_dz
         public static void Load()
         {
             _objs = new BaseObject[15];
-            _bullet = new Bullet(new Point(0, 200), new Point(5, 0), new Size(4, 1));
             _asteroids = new Asteroid[5];
             var rnd = new Random();
             for (var i = 0; i < _objs.Length; i++)
@@ -67,6 +68,7 @@ namespace Game_dz
 
             Ship.MessageDie += Finish;
             form.KeyDown += Form_KeyDown;
+            Log += WriteToLog;
 
             try
             {
@@ -82,16 +84,28 @@ namespace Game_dz
 
         }
 
+        public static void WriteToLog(object sender, string message)
+        {
+            Console.WriteLine(message);
+            using (StreamWriter sw = new StreamWriter("log.txt", true))
+            {
+                sw.WriteLine(message);
+            }
+
+        }
+
+
         public static void Form_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.ControlKey)
                 _bullet = new Bullet(new Point(_ship.Rect.X + 10, _ship.Rect.Y + 4),
             new Point(4, 0), new Size(4, 1));
-            if (e.KeyCode == Keys.Up)
+            if (e.KeyCode == Keys.W)
                 _ship.Up();
-            if (e.KeyCode == Keys.Down)
+            if (e.KeyCode == Keys.S)
                 _ship.Down();
-        }
+        }
+
         public static void Draw()
         {
             // Проверяем вывод графики
@@ -107,7 +121,8 @@ namespace Game_dz
             _ship?.Draw();
             if (_ship != null)
                 Buffer.Graphics.DrawString("Energy:" + _ship.Energy, SystemFonts.DefaultFont, Brushes.White, 0, 0);
-            Buffer.Render();
+            Buffer.Render();
+
         }
 
         private static void Timer_Tick(object sender, EventArgs e)
@@ -122,19 +137,24 @@ namespace Game_dz
                 obj?.Update();
             foreach (BaseObject obj in _asteroids)
             {
-                if (obj.Collision(_bullet))
+                if (_bullet != null)
                 {
-                    System.Media.SystemSounds.Hand.Play();
-                    _bullet?.Respawn();
-                    obj?.Respawn();
+                    if (obj.Collision(_bullet))
+                    {
+                        System.Media.SystemSounds.Hand.Play();
+                        _bullet = null;
+                        obj?.Respawn();
+                        Log(obj, "Asteroid destroyed");
+                    }
                 }
-
                 if (obj.Collision(_ship))
                 {
                     _ship?.EnergyLow(10);
                     obj?.Respawn();
                     System.Media.SystemSounds.Asterisk.Play();
-                    if (_ship.Energy <= 0) _ship?.Die();
+                    Log(obj, "Ship was hit by asteroid");
+                    if (_ship.Energy <= 0)
+                        _ship?.Die();
                 }
 
                 obj?.Update();
@@ -149,7 +169,8 @@ namespace Game_dz
             Buffer.Graphics.DrawString("The End", new Font(FontFamily.GenericSansSerif, 60,
             FontStyle.Underline), Brushes.White, 200, 100);
             Buffer.Render();
-        }
+        }
+
 
     }
 

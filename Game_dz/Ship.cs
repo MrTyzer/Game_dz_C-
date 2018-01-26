@@ -11,7 +11,8 @@ namespace Game_dz
     {
         private int _energy = 100;
         public int Energy => _energy;
-        public static event Message MessageDie;
+        public static event Message MessageDie;
+
         public void EnergyLow(int n)
         {
             _energy -= n;
@@ -41,5 +42,6 @@ namespace Game_dz
         {
             MessageDie?.Invoke();
         }
-    }
+    }
+
 }

@@ -16,10 +16,7 @@ namespace Game_dz
         public override void Update()
         {
             Pos.X = Pos.X + 10;
-            if (Pos.X > Game.Width)
-            {
-                Respawn();
-            }
+            
         }
 
         public override void Respawn()

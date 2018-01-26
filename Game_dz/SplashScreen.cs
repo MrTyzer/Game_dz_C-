@@ -17,9 +17,10 @@ namespace Game_dz
 
         public static Form MainForm { get; set; }
 
-        public static Button button1 { get; private set; }
-        public static Button button2 { get; private set; }
-        public static Button button3 { get; private set; }
+        public static Button Button1 { get; private set; }
+        public static Button Button2 { get; private set; }
+        public static Button Button3 { get; private set; }
+        public static Label Box { get; private set; }
 
 
         static SplashScreen()
@@ -48,23 +49,23 @@ namespace Game_dz
             Form form = new Form();
             form.Width = width;
             form.Height = height;
-            button1 = new Button();
-            button2 = new Button();
-            button3 = new Button();
-            button1.Text = "Начало игры";
-            button2.Text = "Рекорды";
-            button3.Text = "Выход";
-            button1.AutoSize = true;
-            button2.AutoSize = true;
-            button3.AutoSize = true;
-            button1.Location = new Point((width / 2) - button1.Width / 2, height / 2);
-            button2.Location = new Point((width / 2) - button2.Width / 2, (height / 2) + 30);
-            button3.Location = new Point((width / 2) - button3.Width / 2, (height / 2) + 60);
-            form.Controls.Add(button1);
-            form.Controls.Add(button2);
-            form.Controls.Add(button3);
-            button1.Click += StartGame;
-            button3.Click += Quit;
+            Button1 = new Button();
+            Button2 = new Button();
+            Button3 = new Button();
+            Button1.Text = "Начало игры";
+            Button2.Text = "Рекорды";
+            Button3.Text = "Выход";
+            Button1.AutoSize = true;
+            Button2.AutoSize = true;
+            Button3.AutoSize = true;
+            Button1.Location = new Point((width / 2) - Button1.Width / 2, height / 2);
+            Button2.Location = new Point((width / 2) - Button2.Width / 2, (height / 2) + 30);
+            Button3.Location = new Point((width / 2) - Button3.Width / 2, (height / 2) + 60);
+            form.Controls.Add(Button1);
+            form.Controls.Add(Button2);
+            form.Controls.Add(Button3);
+            Button1.Click += StartGame;
+            Button3.Click += Quit;
             MainForm = form;
             Init(MainForm);
         }
@@ -73,9 +74,10 @@ namespace Game_dz
         public static void StartGame(Object sender, EventArgs e)
         {
             Game.Init(MainForm);
-            button1.Hide();
-            button2.Hide();
-            button3.Location = new Point(0, 0);
+            Button1.Hide();
+            Button2.Hide();
+            MainForm.KeyPreview = true;
+            Button3.Location = new Point(0, Game.Height - 60);
             Game.Draw();
         }
 
