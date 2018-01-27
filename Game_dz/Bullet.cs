@@ -19,12 +19,5 @@ namespace Game_dz
             
         }
 
-        public override void Respawn()
-        {
-            var rnd = new Random();
-            Pos.Y = rnd.Next(0, Game.Height);
-            Pos.X = 0;
-        }
-
     }
 }

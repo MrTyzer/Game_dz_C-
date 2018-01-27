@@ -34,12 +34,5 @@ namespace Game_dz
         {
             Game.Buffer.Graphics.FillEllipse(Brushes.White, Pos.X, Pos.Y, Size.Width, Size.Height);
         }
-
-        public override void Respawn()
-        {
-            var rnd = new Random();
-            Pos.Y = rnd.Next(0, Game.Height);
-            Pos.X = Game.Width;
-        }
     }
 }

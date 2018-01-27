@@ -16,6 +16,8 @@ namespace Game_dz
         public void EnergyLow(int n)
         {
             _energy -= n;
+            if (_energy > 100)
+                _energy = 100;
         }
         public Ship(Point pos, Point dir, Size size) : base(pos, dir, size)
         {

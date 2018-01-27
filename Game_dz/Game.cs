@@ -17,7 +17,9 @@ namespace Game_dz
         public static Random Rnd = new Random();
         public static int Width { get; set; }
         public static int Height { get; set; }
+        public static int Points { get; private set; } = 0;
         private static Bullet _bullet;
+        private static MedKit _kit;
         private static Asteroid[] _asteroids;
         public static event EventHandler<string> Log;
 
@@ -35,6 +37,8 @@ namespace Game_dz
             _objs = new BaseObject[15];
             _asteroids = new Asteroid[5];
             var rnd = new Random();
+            int d = rnd.Next(5, Height);
+            _kit = new MedKit(new Point(Width, d), new Point(7, 0), new Size(15, 15));
             for (var i = 0; i < _objs.Length; i++)
             {
                 int r = rnd.Next(5, 25);
@@ -117,10 +121,12 @@ namespace Game_dz
             {
                 a?.Draw();
             }
+            _kit?.Draw();
             _bullet?.Draw();
             _ship?.Draw();
             if (_ship != null)
                 Buffer.Graphics.DrawString("Energy:" + _ship.Energy, SystemFonts.DefaultFont, Brushes.White, 0, 0);
+            Buffer.Graphics.DrawString("Points:" + Points, SystemFonts.DefaultFont, Brushes.White, 80, 0);
             Buffer.Render();
 
         }
@@ -141,9 +147,10 @@ namespace Game_dz
                 {
                     if (obj.Collision(_bullet))
                     {
-                        System.Media.SystemSounds.Hand.Play();
+                        System.Media.SystemSounds.Asterisk.Play();
                         _bullet = null;
                         obj?.Respawn();
+                        Points += 10;
                         Log(obj, "Asteroid destroyed");
                     }
                 }
@@ -151,7 +158,7 @@ namespace Game_dz
                 {
                     _ship?.EnergyLow(10);
                     obj?.Respawn();
-                    System.Media.SystemSounds.Asterisk.Play();
+                    System.Media.SystemSounds.Hand.Play();
                     Log(obj, "Ship was hit by asteroid");
                     if (_ship.Energy <= 0)
                         _ship?.Die();
@@ -159,8 +166,16 @@ namespace Game_dz
 
                 obj?.Update();
             }
+            if (_kit.Collision(_ship))
+            {
+                _ship?.EnergyLow(-10);
+                System.Media.SystemSounds.Asterisk.Play();
+                _kit?.Respawn();
+                Log(_kit, "Use med kit");
+            }
             _bullet?.Update();
             _ship?.Update();
+            _kit?.Update();
         }
 
         public static void Finish()
