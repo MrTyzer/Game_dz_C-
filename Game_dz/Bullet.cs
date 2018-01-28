@@ -15,8 +15,11 @@ namespace Game_dz
         }
         public override void Update()
         {
-            Pos.X = Pos.X + 10;
-            
+            Pos.X = Pos.X + 10; 
+        }
+        public void Destroy()
+        {
+
         }
 
     }
