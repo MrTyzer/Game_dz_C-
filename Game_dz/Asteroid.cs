@@ -11,20 +11,17 @@ namespace Game_dz
             Power = power;
         }
 
-        public static Asteroid Spawn()
+        public static Asteroid Spawn(int diff)
         {
             var rnd = new Random();
-            int r = rnd.Next(20, 50);
-            return new Asteroid(new Point(Game.Width, rnd.Next(0, Game.Height)), new Point(150 / r, r), new
-            Size(r, r), r / 10);
+            int r = rnd.Next(30, 80);
+            return new Asteroid(new Point(Game.Width, rnd.Next(0, Game.Height)), new Point((400 / r) + diff * 2, r), new
+            Size(r, r), (r / 15) + diff);
         }
 
-        public void SwapSpeed(Asteroid obj)
+        public void Empower()
         {
-            if (Power < obj.Power)
-                Dir = obj.Dir;
-            else
-                obj.Dir = Dir; 
+            Power += 1;
         }
 
         public void PowerLow()
@@ -33,6 +30,7 @@ namespace Game_dz
             if (Power < 1)
             {
                 Respawn();
+                System.Media.SystemSounds.Asterisk.Play();
                 Power = Size.Height / 10;
                 Game.Points += 10 * Power;
             }

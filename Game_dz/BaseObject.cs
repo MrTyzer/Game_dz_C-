@@ -5,7 +5,7 @@ namespace Game_dz
     public abstract class BaseObject : ICollision
     {
         protected Point Pos;
-        protected Point Dir;
+        public Point Dir;
         protected Size Size;
         public delegate void Message();
 
@@ -22,6 +22,11 @@ namespace Game_dz
                 throw new GameObjectException("Объект не может иметь отрицательный размер");
         }
         public abstract void Draw();
+
+        public virtual void Haste()
+        {
+            Dir.X += 2;
+        }
         
         public virtual void Update()
         {

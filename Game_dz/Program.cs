@@ -15,10 +15,12 @@ namespace Game_dz
         static void Main(string[] args)
         {
             int width = 800;
-            int height = -700;
+            int height = 600;
             //очистка файла
             StreamWriter sw = new StreamWriter("Log.txt", false);
+            StreamWriter sr = new StreamWriter("Records.txt", true);
             sw.Dispose();
+            sr.Dispose();
             try
             {
             SplashScreen.FormInit(width, height);

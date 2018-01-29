@@ -15,8 +15,9 @@ namespace Game_dz
         public static BufferedGraphics Buffer;
         private static Timer _timer = new Timer();
         private static Timer _difficultyTimer = new Timer();
+        private static int _difficultyMultiplier = 0;
         public static Random Rnd = new Random();
-        private static List<Bullet> _bullet = new List<Bullet>();
+        public static List<Bullet> _bullet = new List<Bullet>();
         private static List<Bullet> BulletsToDestroy = new List<Bullet>();
         private static MedKit _kit;
         private static List<Asteroid> _asteroids;
@@ -47,11 +48,11 @@ namespace Game_dz
                 int r = rnd.Next(5, 25);
                 _objs[i] = new Star(new Point(rnd.Next(0, Width), rnd.Next(0, Height)), new Point(20, r), new Size(2, 2));
             }
-            for (var i = 0; i < 5; i++)
+            for (var i = 0; i < 3; i++)
             {
-                int r = rnd.Next(20, 50);
-                _asteroids.Add(new Asteroid(new Point(Width, rnd.Next(0, Height)), new Point(150 / r, r), new
-                Size(r, r), r / 10));
+                int r = rnd.Next(30, 80);
+                _asteroids.Add(new Asteroid(new Point(Width, rnd.Next(0, Height)), new Point(400 / r, r), new
+                Size(r, r), r / 15));
             }
 
         }
@@ -67,7 +68,7 @@ namespace Game_dz
                                       // Запоминаем размеры формы
             Width = form.Width;
             Height = form.Height;
-            _ship = new Ship(new Point(10, 400), new Point(5, 5), new Size(10, 10));
+            _ship = new Ship(new Point(8, 400), new Point(10, 10), new Size(10, 10));
 
             // Связываем буфер в памяти с графическим объектом.
             // для того, чтобы рисовать в буфере
@@ -75,6 +76,7 @@ namespace Game_dz
 
             Ship.MessageDie += Finish;
             form.KeyDown += Form_KeyDown;
+            form.KeyUp += Form_KeyUp;
             Log += WriteToLog;
 
             try
@@ -85,10 +87,10 @@ namespace Game_dz
             {
                 Console.WriteLine(d.Message);
             }
-            _timer.Interval = 30;
             _difficultyTimer.Interval = 10000;
             _difficultyTimer.Start();
-            _difficultyTimer.Tick += AddAsteroid;
+            _difficultyTimer.Tick += DifficultyInc;
+            _timer.Interval = 20;
             _timer.Start();
             _timer.Tick += Timer_Tick;
         }
@@ -109,22 +111,28 @@ namespace Game_dz
             Update();
         }
 
-        public static void AddAsteroid(object sender, EventArgs e)
+        public static void DifficultyInc(object sender, EventArgs e)
         {
-
-            _asteroids.Add(Asteroid.Spawn());
+            _asteroids.Add(Asteroid.Spawn(_difficultyMultiplier));
+            _kit.Haste();
+            foreach (Asteroid ast in _asteroids)
+            {
+                ast.Haste();
+                ast.Empower();
+            }
+            _difficultyMultiplier += 1;
         }
 
         public static void Form_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.ControlKey)
-                _bullet.Add(new Bullet(new Point(_ship.Rect.X + 10, _ship.Rect.Y + 4),
-            new Point(4, 0), new Size(4, 1)));
-            if (e.KeyCode == Keys.W)
-                _ship.Up();
-            if (e.KeyCode == Keys.S)
-                _ship.Down();
+            _ship.ControlManagerKeyDown(e);
         }
+
+        public static void Form_KeyUp(object sender, KeyEventArgs e)
+        {
+            _ship.ControlManagerKeyUp(e);
+        }
+
 
         public static void Draw()
         {
@@ -160,14 +168,6 @@ namespace Game_dz
                 obj?.Update();
             foreach (Asteroid obj in _asteroids)
             {
-                foreach (Asteroid ast in _asteroids)
-                {
-                    if (ast.Collision(obj))
-                    {
-                        ast.SwapSpeed(obj); 
-                    }
-                }
-
                 if (_bullet.Any())
                 {
                     foreach (Bullet bul in _bullet)
@@ -175,9 +175,7 @@ namespace Game_dz
                         if (obj.Collision(bul))
                         {
                             obj?.PowerLow();
-                            System.Media.SystemSounds.Asterisk.Play();
                             BulletsToDestroy.Add(bul);
-                            Log(obj, "Asteroid was hit");
                         }
                     }
                     foreach (Bullet bul in BulletsToDestroy)
@@ -219,6 +217,17 @@ namespace Game_dz
             Buffer.Graphics.DrawString("The End", new Font(FontFamily.GenericSansSerif, 60,
             FontStyle.Underline), Brushes.White, 200, 100);
             Buffer.Render();
+            SplashScreen.Results.Add(Points);
+            if (SplashScreen.Results.Count > 5)
+            {
+                SplashScreen.Results.Remove(SplashScreen.Results.Last());
+            }
+            using (StreamWriter sw = new StreamWriter("Records.txt", true))
+            {
+
+                foreach (int res in SplashScreen.Results)
+                    sw.WriteLine(res.ToString());
+            }
         }
     }
 }
