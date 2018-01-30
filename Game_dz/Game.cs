@@ -11,31 +11,34 @@ namespace Game_dz
 {
     public static class Game
     {
+        #region Private data
         private static BufferedGraphicsContext _context;
-        public static BufferedGraphics Buffer;
         private static Timer _timer = new Timer();
         private static Timer _difficultyTimer = new Timer();
         private static int _difficultyMultiplier = 0;
-        public static Random Rnd = new Random();
-        public static List<Bullet> _bullet = new List<Bullet>();
-        private static List<Bullet> BulletsToDestroy = new List<Bullet>();
         private static MedKit _kit;
         private static List<Asteroid> _asteroids;
-        public static event EventHandler<string> Log;
         private static Ship _ship;
-        // Свойства
+        #endregion
+
+        #region Public Data
+        public static BufferedGraphics Buffer;
+        public static Random Rnd = new Random();
+        public static List<Bullet> _bullet = new List<Bullet>();
+        public static List<Bullet> BulletsToDestroy = new List<Bullet>();
+        public static BaseObject[] _objs;
+        public static event EventHandler<string> Log;
+        #endregion
+
+        #region Properties
         // Ширина и высота игрового поля
         public static int Width { get; private set; }
         public static int Height { get; private set; }
+        //Игровые очки
         public static int Points { get; set; } = 0;
-        
-       
+        #endregion
 
-        static Game()
-        {
-        }
-
-        public static BaseObject[] _objs;
+        #region Public methods
         public static void Load()
         {
             _objs = new BaseObject[15];
@@ -105,23 +108,7 @@ namespace Game_dz
 
         }
 
-        private static void Timer_Tick(object sender, EventArgs e)
-        {
-            Draw();
-            Update();
-        }
-
-        public static void DifficultyInc(object sender, EventArgs e)
-        {
-            _asteroids.Add(Asteroid.Spawn(_difficultyMultiplier));
-            _kit.Haste();
-            foreach (Asteroid ast in _asteroids)
-            {
-                ast.Haste();
-                ast.Empower();
-            }
-            _difficultyMultiplier += 1;
-        }
+        
 
         public static void Form_KeyDown(object sender, KeyEventArgs e)
         {
@@ -229,5 +216,27 @@ namespace Game_dz
                     sw.WriteLine(res.ToString());
             }
         }
+        #endregion
+
+        #region Timer methods
+
+        private static void Timer_Tick(object sender, EventArgs e)
+        {
+            Draw();
+            Update();
+        }
+
+        private static void DifficultyInc(object sender, EventArgs e)
+        {
+            _asteroids.Add(Asteroid.Spawn(_difficultyMultiplier));
+            _kit.Haste();
+            foreach (Asteroid ast in _asteroids)
+            {
+                ast.Haste();
+                ast.Empower();
+            }
+            _difficultyMultiplier += 1;
+        }
+        #endregion
     }
 }

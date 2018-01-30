@@ -32,7 +32,6 @@ namespace Game_dz
                 height = 600;
                 SplashScreen.FormInit(width, height);
             }
-
             SplashScreen.MainForm.Show();
             Application.Run(SplashScreen.MainForm);
         }
